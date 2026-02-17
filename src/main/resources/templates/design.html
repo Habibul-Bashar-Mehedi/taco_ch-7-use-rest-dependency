@@ -7,6 +7,10 @@
 <body>
     <h1>welcome to design pages...</h1>
     <img th:src="@{/images/TacoCloud.jpg}"/>
+    <form method="POST" th:action="@{/logout}" id="logoutForm">
+        <button>Logout</button>
+    </form>
+
     <form th:action="@{/design}" th:method="post" th:object="${taco}">
         <!-- Wrap part -->
         <div class="main-grid">

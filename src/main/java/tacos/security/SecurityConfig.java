@@ -35,9 +35,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/design", "/orders").hasRole("USER")
-                        .requestMatchers("/", "/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/design", true)
+                )
+                .oauth2Login(oauth -> oauth
                         .loginPage("/login")
                         .defaultSuccessUrl("/design", true)
                 )
