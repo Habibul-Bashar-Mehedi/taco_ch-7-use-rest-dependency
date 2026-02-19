@@ -56,6 +56,10 @@ public class TacoOrder  implements Serializable {
         this.tacos.add(taco);
     }
 
+    @PrePersist
+    void placedAt() {
+        this.placedAt = new Date();
+    }
 
 
 }

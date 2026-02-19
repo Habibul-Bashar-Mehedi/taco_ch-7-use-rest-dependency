@@ -17,10 +17,6 @@ spring:
               - email
 
 ---
-server:
-  port: 3830
-
----
 spring:
   security:
     user:
