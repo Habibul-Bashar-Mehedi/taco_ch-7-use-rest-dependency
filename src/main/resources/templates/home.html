@@ -13,8 +13,16 @@
       &lt;&lt;&lt; Order Now &gt;&gt;&gt;
     </span>
         </a>
+        <br/><br/>
     </p>
+    <a th:href="@{/orders}">View Orders</a><br/><br/>
+        <br/><br/>
+
     <p><a th:href="@{/login}">Login</a> <span style="font-weight: bold;">or</span> <a th:href="@{/register}">registration</a></p>
+
+    <form method="POST" th:action="@{/logout}" id="logoutForm">
+        <button>Logout</button>
+    </form>
 
 </body>
 
