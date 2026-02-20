@@ -5,8 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import tacos.data.*;
-import tacos.data.Ingredient.Type;
+import tacos.data.entitys.Ingredient;
+import tacos.data.entitys.Ingredient.Type;
+import tacos.data.entitys.Taco;
+import tacos.data.repositorys.IngredientRepository;
+import tacos.data.repositorys.TacoRepository;
+import tacos.data.repositorys.UserRepository;
 
 import java.util.Arrays;
 

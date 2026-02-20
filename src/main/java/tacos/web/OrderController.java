@@ -10,10 +10,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import tacos.User;
-import tacos.data.OrderRepository;
-import tacos.data.TacoOrder;
+import tacos.data.repositorys.OrderRepository;
+import tacos.data.entitys.TacoOrder;
 
-import javax.swing.*;
 import org.springframework.data.domain.Pageable;
 
 

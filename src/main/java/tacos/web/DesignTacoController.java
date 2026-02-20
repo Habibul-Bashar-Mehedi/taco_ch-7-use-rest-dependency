@@ -8,8 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import tacos.data.*;
-import tacos.data.Ingredient.Type;
+import tacos.data.entitys.Ingredient;
+import tacos.data.entitys.Ingredient.Type;
+import tacos.data.entitys.Taco;
+import tacos.data.entitys.TacoOrder;
+import tacos.data.repositorys.IngredientRepository;
 
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;

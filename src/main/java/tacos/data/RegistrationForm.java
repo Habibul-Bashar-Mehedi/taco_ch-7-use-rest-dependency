@@ -1,4 +1,4 @@
-package tacos.security;
+package tacos.data;
 
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
