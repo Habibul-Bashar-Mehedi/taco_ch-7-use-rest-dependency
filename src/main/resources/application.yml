@@ -46,3 +46,8 @@ spring:
 logging:
   level:
     tacos: WARN
+---
+spring:
+  data:
+    rest:
+      base-path: /data-api
