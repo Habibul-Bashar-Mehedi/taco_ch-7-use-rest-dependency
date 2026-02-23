@@ -1,7 +1,6 @@
 package tacos;
 
-import jakarta.persistence.Table;
-import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,13 +20,16 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class User implements UserDetails {
     private static final long serialVersionUTD = 1L;
+    private static final String ROLE_USER = "ROLE_USER";
+    private static final List<GrantedAuthority> DEFAULT_AUTHORITIES =
+            List.of(new SimpleGrantedAuthority(ROLE_USER));
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private final String username;
     private final String password;
-    private final String fullname;
+    private final String fullName;
     private final String street;
     private final String city;
     private final String state;
@@ -35,7 +38,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return DEFAULT_AUTHORITIES;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package tacos;
 
+import java.util.Arrays;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +14,11 @@ import tacos.data.repositorys.IngredientRepository;
 import tacos.data.repositorys.TacoRepository;
 import tacos.data.repositorys.UserRepository;
 
-import java.util.Arrays;
 
 @Profile("!prod")
 @Configuration
 public class DevelopmentConfig {
+
     @Bean
     public CommandLineRunner dataLoader(
             IngredientRepository repo,
@@ -54,18 +56,25 @@ public class DevelopmentConfig {
             repo.save(jack);
             repo.save(salsa);
             repo.save(sourCream);
+
+            userRepo.save(new User("habuma", encoder.encode("password"),
+                    "Craig Walls", "123 North Street", "Cross Roads", "TX",
+                    "76227", "123-123-1234"));
+
             Taco taco1 = new Taco();
             taco1.setName("Carnivore");
             taco1.setIngredients(Arrays.asList(
                     flourTortilla, groundBeef, carnitas,
                     sourCream, salsa, cheddar));
             tacoRepo.save(taco1);
+
             Taco taco2 = new Taco();
             taco2.setName("Bovine Bounty");
             taco2.setIngredients(Arrays.asList(
                     cornTortilla, groundBeef, cheddar,
                     jack, sourCream));
             tacoRepo.save(taco2);
+
             Taco taco3 = new Taco();
             taco3.setName("Veg-Out");
             taco3.setIngredients(Arrays.asList(
@@ -74,4 +83,5 @@ public class DevelopmentConfig {
             tacoRepo.save(taco3);
         };
     }
+
 }

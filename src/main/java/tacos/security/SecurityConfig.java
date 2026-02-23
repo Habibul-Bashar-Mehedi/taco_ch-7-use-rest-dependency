@@ -1,54 +1,81 @@
 package tacos.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation
+        .authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web
+        .builders.HttpSecurity;
+import org.springframework.security.config.annotation.web
+        .configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web
+        .configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.springframework.security.web.SecurityFilterChain;
-import tacos.data.repositorys.UserRepository;
-
-import tacos.User;
-
+@SuppressWarnings("deprecation")
 @Configuration
-public class SecurityConfig {
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepo) {
-        return username -> {
-            User user = userRepo.findByUsername(username);
-            if (user != null) return user;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-            throw new UsernameNotFoundException("User '"+username+"' not found");
-        };
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/design", "/orders").hasRole("USER")
-                        .anyRequest().permitAll()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/design", true)
-                )
-                .oauth2Login(oauth -> oauth
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/design", true)
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/") // logout er por '/' redirect hobe
-                );
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS).permitAll() // needed for Angular/CORS
+                .antMatchers(HttpMethod.PATCH, "/api/ingredients").permitAll()
+                .antMatchers("/api/**").authenticated()
+                .antMatchers("/", "/register", "/login",
+                        "/h2-console/**", "/images/**", "/css/**").permitAll()
+                .antMatchers("/design", "/orders/**").hasRole("USER")
+                .anyRequest().authenticated()
 
-        return http.build();
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .and()
+
+                .httpBasic()
+                .realmName("Taco Cloud")
+
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/h2-console/**")
+
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+        ;
     }
+
+    @Bean
+    public PasswordEncoder encoder() {
+//    return new StandardPasswordEncoder("53cr3t");
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(encoder());
+
+    }
+
+
 }
